@@ -3,91 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Refaccell - Catálogo y Servicio Técnico</title>
+    <title>Refaccell - Importadora de Refacciones y Servicio Técnico</title>
+    <link rel="icon" type="image/png" href="iconoRefaccell.png">
     <style>
         :root {
-            --primary: #0f172a;
-            --accent: #2563eb;
+            --bg: #07090e;
+            --card-bg: #111827;
+            --card-border: #1f2937;
+            --cyan-accent: #00b4d8;
+            --gold-accent: #fb8500;
+            --text: #f3f4f6;
+            --text-muted: #9ca3af;
             --wa-color: #25d366;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding-bottom: 40px; }
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 40px; min-height: 100vh; }
 
-        /* Header */
-        header { background: var(--primary); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        header h1 { font-size: 2rem; letter-spacing: 1px; color: #38bdf8; }
-        header p { font-size: 0.95rem; color: #94a3b8; margin-top: 5px; }
+        /* Header con toque de la marca */
+        header { 
+            background: linear-gradient(135deg, #0b0f19 0%, #111827 100%); 
+            color: white; 
+            padding: 30px 20px; 
+            text-align: center; 
+            border-bottom: 3px solid;
+            border-image: linear-gradient(to right, var(--cyan-accent), var(--gold-accent)) 1;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        header h1 { 
+            font-size: 2.4rem; 
+            letter-spacing: 2px; 
+            color: var(--cyan-accent); 
+            font-weight: 800;
+            text-shadow: 0 0 15px rgba(0, 180, 216, 0.3);
+        }
+        header p { font-size: 0.95rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+
+        /* Estilos para el logotipo del encabezado */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .header-logo {
+            max-height: 140px; /* Ajusta esta altura según prefieras que se vea de grande */
+            width: auto;      /* Mantiene la proporción original de la imagen */
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(0, 180, 216, 0.3)); /* Opcional: le da un brillo sutil estilo neón acorde al diseño */
+        }
 
         /* Contenedor principal */
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
 
         /* Controles y Búsqueda */
-        .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; justify-content: space-between; align-items: center; }
+        .controls { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; justify-content: space-between; align-items: center; }
         .search-box { flex: 1; min-width: 280px; }
-        .search-box input { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
-        .search-box input:focus { border-color: var(--accent); }
+        .search-box input { 
+            width: 100%; 
+            padding: 14px 18px; 
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border); 
+            border-radius: 10px; 
+            font-size: 1rem; 
+            color: white;
+            outline: none; 
+            transition: all 0.3s;
+        }
+        .search-box input::placeholder { color: #6b7280; }
+        .search-box input:focus { border-color: var(--cyan-accent); box-shadow: 0 0 10px rgba(0, 180, 216, 0.2); }
 
-        .tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
-        .tab-btn { background: #e2e8f0; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #475569; white-space: nowrap; transition: 0.2s; }
-        .tab-btn.active, .tab-btn:hover { background: var(--accent); color: white; }
+        .tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn { 
+            background: var(--card-bg); 
+            border: 1px solid var(--card-border); 
+            padding: 10px 18px; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            color: var(--text-muted); 
+            white-space: nowrap; 
+            transition: all 0.2s; 
+        }
+        .tab-btn.active, .tab-btn:hover { 
+            background: var(--cyan-accent); 
+            color: #000; 
+            border-color: var(--cyan-accent);
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
+        }
 
         /* Grid de Productos */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
 
-        /* Tarjeta de Producto */
-        .card { background: var(--card-bg); border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        /* Tarjeta de Producto Estilo Dark Tech */
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 14px; 
+            border: 1px solid var(--card-border); 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; 
+        }
+        .card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.6); 
+            border-color: #374151;
+        }
         
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-        .badge { font-size: 0.75rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; }
-        .badge-hueso { background: #fef3c7; color: #d97706; }
-        .badge-nueva { background: #dbeafe; color: #2563eb; }
-        .badge-servicio { background: #f3e8ff; color: #9333ea; }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .badge { font-size: 0.7rem; font-weight: 800; padding: 5px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Insignias personalizadas con la gama del logo */
+        .badge-hueso { background: rgba(251, 133, 0, 0.15); color: var(--gold-accent); border: 1px solid rgba(251, 133, 0, 0.3); }
+        .badge-nueva { background: rgba(0, 180, 216, 0.15); color: var(--cyan-accent); border: 1px solid rgba(0, 180, 216, 0.3); }
+        .badge-herramienta { background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
+        .badge-servicio { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
 
-        .card-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
-        .card-subtitle { font-size: 0.9rem; color: #64748b; margin-bottom: 12px; }
-        .card-detail { font-size: 0.85rem; color: #475569; margin-bottom: 15px; }
+        .brand-text { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+        .card-title { font-size: 1.15rem; font-weight: 700; color: white; margin-bottom: 8px; }
+        .spec-row { font-size: 0.88rem; color: #d1d5db; margin-bottom: 6px; }
+        .card-notes { font-size: 0.82rem; color: var(--text-muted); margin-top: 8px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; }
 
-        /* Contenedor estricto para las imágenes */
+        /* Contenedor de imágenes adaptado */
         .card-img-container {
             width: 100%;
-            height: 180px; /* Puedes ajustar la altura fija que prefieras para todas las tarjetas */
-            background-color: #f1f5f9; /* Fondo sutil por si la imagen carga lento */
+            height: 180px;
+            background-color: #07090e;
             border-radius: 8px;
             overflow: hidden;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid var(--card-border);
         }
-
-        /* Propiedad mágica para ajustar la imagen sin deformarla ni romper la tarjeta */
         .card-img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Recorta proporcionalmente para rellenar el espacio perfectamente */
-            /* O puedes usar 'object-fit: contain;' si prefieres que se vea completa con bandas a los lados */
+            object-fit: cover;
+            transition: transform 0.3s;
         }
+        .card:hover .card-img { transform: scale(1.03); }
 
-        .card-footer { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
-        .price { font-size: 1.3rem; font-weight: 800; color: #16a34a; }
+        .card-footer { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; border-top: 1px solid var(--card-border); padding-top: 12px; }
+        .price { font-size: 1.35rem; font-weight: 800; color: #4ade80; }
+        .price-service { font-size: 0.95rem; color: var(--text-muted); }
 
-        .btn-wa { background: var(--wa-color); color: white; text-decoration: none; text-align: center; padding: 10px; border-radius: 8px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s; }
-        .btn-wa:hover { opacity: 0.9; }
+        .tag-quality, .tag-cond { color: var(--cyan-accent); font-weight: 600; }
+        .highlight-comp { color: #facc15; font-weight: 600; }
+
+        /* Botón de WhatsApp estilizado */
+        .btn-wa { 
+            background: var(--wa-color); 
+            color: #000; 
+            text-decoration: none; 
+            text-align: center; 
+            padding: 11px; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            transition: opacity 0.2s, transform 0.2s; 
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+        }
+        .btn-wa:hover { opacity: 0.92; transform: scale(1.01); }
 
         /* Estado Carga / Vacío */
-        .status-msg { text-align: center; grid-column: 1 / -1; padding: 40px; color: #64748b; font-size: 1.1rem; }
+        .status-msg { text-align: center; grid-column: 1 / -1; padding: 50px; color: var(--text-muted); font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>REFACCELL</h1>
-        <p>Refacciones de Hueso, Piezas Nuevas y Servicio Técnico Especializado</p>
+        <!-- Reemplazamos el texto por tu imagen PNG -->
+        <div class="logo-container">
+            <img src="logorefaccell.png" alt="Refaccell Logotipo" class="header-logo">
+        </div>
+        <p>Importadora de Refacciones • Siempre pensando en ti</p>
     </header>
 
     <div class="container">
@@ -95,7 +192,7 @@
         <!-- Controles de búsqueda y pestañas -->
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Buscar por marca, modelo o pieza (ej. iPhone 11, Display, Lógica)..." onkeyup="filtrarProductos()">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar por marca, modelo o pieza (ej. iPhone 11, Display, Lógica)..." onkeyup="filtrarProductos()">
             </div>
             <div class="tabs">
                 <button class="tab-btn active" onclick="filtrarCategoria('todos', this)">Todos</button>
@@ -115,18 +212,16 @@
 
     <script>
         // CONFIGURACIÓN:
-        // Reemplaza esta URL con tu endpoint de Sheet.best, Sheety o Google Apps Script
         const API_URL = "https://script.google.com/macros/s/AKfycbw2cVoYTM-UJ1YW_3NHftPoc-NQWcx0gCn89QYCFUWfqlXmy9U_X8pWZJdJLe35YS6ryA/exec";
         const TEL_WHATSAPP = "5210000000000"; // Reemplazar con el número real de Refaccell
 
-        // Datos de respaldo/prueba para previsualizar sin tener la base conectada aún
         const datosMock = [
-            { Tipo: "Hueso", Marca: "Samsung", Modelo: "Galaxy A52", Pieza: "Tarjeta Lógica (Liberada 128GB)", Calidad: "Original Usada", Precio: "1200", Notas: "Probada al 100%, incluye cámaras" },
-            { Tipo: "Hueso", Marca: "Apple", Modelo: "iPhone 11", Pieza: "Chasis Completo", Calidad: "Grado B", Precio: "650", Notas: "Incluye flex de carga y botones, detalles estéticos ligeros" },
-            { Tipo: "Nueva", Marca: "Xiaomi", Modelo: "Redmi Note 10", Pieza: "Display / Pantalla", Calidad: "OLED", Precio: "850", Notas: "Garantía de diagnóstico previa a instalación" },
-            { Tipo: "Nueva", Marca: "Motorola", Modelo: "G60", Pieza: "Placa Centro de Carga", Calidad: "Original con Ic de carga rápida", Precio: "180", Notas: "Pieza totalmente nueva" },
-            { Tipo: "Herramientas", Marca: "Mecanic", Modelo: "Universal", Pieza: "Malla Desoldadora + Flux 10cc", Calidad: "Nueva", Precio: "120", Notas: "Insumo de taller" },
-            { Tipo: "Servicio", Marca: "Multimarca", Modelo: "General", Pieza: "Mantenimiento por Humedad / Mojado", Calidad: "Taller", Precio: "350", Notas: "Limpieza ultrasónica y diagnóstico técnico completo" }
+            { Tipo: "Hueso", Marca: "Samsung", Modelo: "Galaxy A52", Pieza: "Tarjeta Lógica (Liberada 128GB)", Condición: "Original Usada", Precio: "1200", Notas: "Probada al 100%, incluye cámaras" },
+            { Tipo: "Hueso", Marca: "Apple", Modelo: "iPhone 11", Pieza: "Chasis Completo", Condición: "Grado B", Precio: "650", Notas: "Incluye flex de carga y botones, detalles estéticos ligeros" },
+            { Tipo: "Nueva", Marca: "Xiaomi", Modelo: "Redmi Note 10", tipoPieza: "Display / Pantalla", Calidad: "OLED", Precio: "850" },
+            { Tipo: "Nueva", Marca: "Motorola", Modelo: "G60", tipoPieza: "Placa Centro de Carga", Calidad: "Original", Precio: "180" },
+            { Tipo: "Herramientas", Categoria: "Herramientas", Nombre_Producto: "Malla Desoldadora + Flux 10cc", Descripción: "Insumo profesional de taller", Precio: "120" },
+            { Tipo: "Servicio", Nombre_Servicio: "Mantenimiento por Humedad", Precio_Estimado: "350", Descripcion_Breve: "Limpieza ultrasónica y diagnóstico técnico completo" }
         ];
 
         let inventario = [];
@@ -157,9 +252,6 @@
                 const seccion = prod.Tipo_Seccion || prod.Tipo || 'Nueva';
                 let cardHTML = "";
 
-                // ==========================================
-                // 1. TARJETA PARA PIEZAS DE HUESO (DONANTES)
-                // ==========================================
                 if (seccion === "Hueso") {
                     const marca = prod.Marca || prod.marca || "";
                     const modelo = prod.Modelo || prod.modelo || "Equipo sin modelo";
@@ -173,17 +265,13 @@
                     const linkWa = `https://wa.me/${TEL_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
 
                     cardHTML = `
-                        <div class="card card-hueso">
+                        <div class="card">
                             <div>
                                 <div class="card-header">
                                     <span class="badge badge-hueso">Hueso / Donante</span>
                                     <small class="brand-text">${marca}</small>
                                 </div>
-                                ${imagen ? `
-                                    <div class="card-img-container">
-                                        <img src="${imagen}" alt="${modelo}" class="card-img">
-                                    </div>
-                                ` : ''}
+                                ${imagen ? `<div class="card-img-container"><img src="${imagen}" alt="${modelo}" class="card-img"></div>` : ''}
                                 <div class="card-title">${modelo}</div>
                                 <div class="spec-row"><b>Pieza:</b> ${pieza}</div>
                                 <div class="spec-row"><b>Condición:</b> <span class="tag-cond">${condicion}</span></div>
@@ -191,21 +279,15 @@
                             </div>
                             <div class="card-footer">
                                 <div class="price">$${precio} MXN</div>
-                                <a href="${linkWa}" target="_blank" class="btn-wa">Pedir por WhatsApp</a>
+                                <a href="${linkWa}" target="_blank" class="btn-wa">💬 Pedir por WhatsApp</a>
                             </div>
                         </div>
                     `;
                 } 
-                // ==========================================
-                // 2. TARJETA PARA PIEZAS NUEVAS
-                // ==========================================
                 else if (seccion === "Nueva") {
                     const marca = prod.Marca || prod.marca || "Multimarca";
                     const modelo = prod.Modelo || prod.modelo || "Compatible / Universal";
-                    
-                    // Lectura directa de tu celda 'tipoPieza' en Google Sheets
                     const tipoPieza = prod.tipoPieza || prod.TipoPieza || prod.Tipo || prod.tipo || prod.Pieza || "Refacción nueva";
-                    
                     const calidad = prod.Calidad || prod.calidad || "Genérica / AAA";
                     const precio = prod.Precio || prod.precio || "0";
                     const imagen = prod.Imagen_URL || prod.imagen_url || "";
@@ -214,31 +296,24 @@
                     const linkWa = `https://wa.me/${TEL_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
 
                     cardHTML = `
-                        <div class="card card-nueva">
+                        <div class="card">
                             <div>
                                 <div class="card-header">
                                     <span class="badge badge-nueva">Nueva</span>
                                     <small class="brand-text">${marca}</small>
                                 </div>
-                                ${imagen ? `
-                                    <div class="card-img-container">
-                                        <img src="${imagen}" alt="${modelo}" class="card-img">
-                                    </div>
-                                ` : ''}
+                                ${imagen ? `<div class="card-img-container"><img src="${imagen}" alt="${modelo}" class="card-img"></div>` : ''}
                                 <div class="card-title">${modelo}</div>
                                 <div class="spec-row"><b>Componente:</b> <span class="highlight-comp">${tipoPieza}</span></div>
                                 <div class="spec-row"><b>Calidad:</b> <span class="tag-quality">${calidad}</span></div>
                             </div>
                             <div class="card-footer">
                                 <div class="price">$${precio} MXN</div>
-                                <a href="${linkWa}" target="_blank" class="btn-wa">Pedir por WhatsApp</a>
+                                <a href="${linkWa}" target="_blank" class="btn-wa">💬 Pedir por WhatsApp</a>
                             </div>
                         </div>
                     `;
                 } 
-                // ==========================================
-                // 3. TARJETA PARA HERRAMIENTAS Y ACCESORIOS
-                // ==========================================
                 else if (seccion === "Herramientas") {
                     const categoria = prod.Categoria || prod.categoria || "Herramientas / Accesorios";
                     const nombreProd = prod.Nombre_Producto || prod.nombre_producto || "Producto";
@@ -250,33 +325,24 @@
                     const linkWa = `https://wa.me/${TEL_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
 
                     cardHTML = `
-                        <div class="card card-herramienta">
+                        <div class="card">
                             <div>
                                 <div class="card-header">
                                     <span class="badge badge-herramienta">${categoria}</span>
                                 </div>
-                                ${imagen ? `
-                                    <div class="card-img-container">
-                                        <img src="${imagen}" alt="${nombreProd}" class="card-img">
-                                    </div>
-                                ` : ''}
+                                ${imagen ? `<div class="card-img-container"><img src="${imagen}" alt="${nombreProd}" class="card-img"></div>` : ''}
                                 <div class="card-title">${nombreProd}</div>
                                 ${descripcion ? `<p class="card-notes">${descripcion}</p>` : ''}
                             </div>
                             <div class="card-footer">
                                 <div class="price">$${precio} MXN</div>
-                                <a href="${linkWa}" target="_blank" class="btn-wa">Pedir por WhatsApp</a>
+                                <a href="${linkWa}" target="_blank" class="btn-wa">💬 Pedir por WhatsApp</a>
                             </div>
                         </div>
                     `;
                 } 
-                // ==========================================
-                // 4. TARJETA PARA SERVICIOS TÉCNICOS
-                // ==========================================
                 else if (seccion === "Servicio") {
                     const nombreServicio = prod.Nombre_Servicio || prod.nombre_servicio || "Servicio Técnico";
-                    
-                    // Captura de rango de precios
                     const precioDesde = prod.Precio_Estimado || prod.precio_estimado || prod.Desde || prod.desde || "";
                     const precioHasta = prod.Precio_Hasta || prod.precio_hasta || prod.Hasta || prod.hasta || "";
                     
@@ -288,22 +354,21 @@
                     }
 
                     const descripcionBreve = prod.Descripcion_Breve || prod.descripcion_breve || "Diagnóstico y reparación especializada en taller.";
-
                     const mensaje = `Hola Refaccell! Requiero cotización de servicio:\n- *Servicio:* ${nombreServicio}\n- *Precio estimado:* ${precioTexto}\n¿Cómo le hago para llevarles el equipo?`;
                     const linkWa = `https://wa.me/${TEL_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
 
                     cardHTML = `
-                        <div class="card card-servicio">
+                        <div class="card">
                             <div>
                                 <div class="card-header">
                                     <span class="badge badge-servicio">Taller / Servicio</span>
                                 </div>
-                                <div class="card-title" style="margin-top: 10px; color: #7c3aed;">${nombreServicio}</div>
+                                <div class="card-title" style="margin-top: 10px; color: #f472b6;">${nombreServicio}</div>
                                 <p class="card-notes" style="margin: 12px 0;">${descripcionBreve}</p>
                             </div>
                             <div class="card-footer">
-                                <div class="price-service">Estimado: <span style="color:#16a34a; font-weight: bold;">${precioTexto}</span></div>
-                                <a href="${linkWa}" target="_blank" class="btn-wa" style="background: #9333ea;">Cotizar Servicio</a>
+                                <div class="price-service">Estimado: <span style="color:#4ade80; font-weight: bold;">${precioTexto}</span></div>
+                                <a href="${linkWa}" target="_blank" class="btn-wa" style="background: #9333ea; color: white;">🛠️ Cotizar Servicio</a>
                             </div>
                         </div>
                     `;
@@ -313,43 +378,29 @@
             });
         }
 
-        // 1. Función al hacer clic en las pestañas
         function filtrarCategoria(cat, btn) {
-            categoriaActual = cat; // Actualiza la categoría (ej. "todos", "Hueso", "Nueva", "Herramientas", "Servicio")
-            
-            // Cambia el diseño visual del botón activo
+            categoriaActual = cat;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
-            
-            // Vuelve a filtrar el catálogo completo
             filtrarProductos();
         }
 
-        // 2. Función inteligente que busca en TODO el inventario
         function filtrarProductos() {
             const query = document.getElementById("searchInput").value.toLowerCase().trim();
             
             const filtrados = inventario.filter(prod => {
-                // Obtenemos la sección del producto de manera segura
                 const seccionProd = (prod.Tipo_Seccion || prod.Tipo || "").toLowerCase();
+                const coincideCat = (categoriaActual.toLowerCase() === "todos") || (seccionProd === categoriaActual.toLowerCase());
                 
-                // Coincidencia por categoría (si es "todos", pasa de largo; si no, compara la sección)
-                const coincideCat = (categoriaActual.toLowerCase() === "todos") || 
-                                    (seccionProd === categoriaActual.toLowerCase());
-                
-                // Coincidencia por texto (busca en marca, modelo, pieza, notas, tipoPieza, etc., sin importar el orden)
                 const textoCompleto = `${prod.Marca || ''} ${prod.Modelo || ''} ${prod.marca || ''} ${prod.modelo || ''} ${prod.Pieza || ''} ${prod.tipoPieza || ''} ${prod.Calidad || ''} ${prod.Condición || ''} ${prod.Nombre_Producto || ''} ${prod.Nombre_Servicio || ''} ${prod.Categoria || ''}`.toLowerCase();
                 
                 const coincideTexto = textoCompleto.includes(query);
-                
-                // El producto se muestra solo si cumple con la categoría seleccionada Y el texto que se está buscando
                 return coincideCat && coincideTexto;
             });
 
             renderizarCatalogo(filtrados);
         }
 
-        // Cargar catálogo al iniciar
         cargarInventario();
     </script>
 </body>
